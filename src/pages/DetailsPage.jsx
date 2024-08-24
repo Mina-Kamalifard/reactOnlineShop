@@ -1,6 +1,6 @@
 import React from 'react'
 
-function DetailsPage() {
+const DetailsPage = () => {
   return (
     <div>DetailsPage</div>
   )

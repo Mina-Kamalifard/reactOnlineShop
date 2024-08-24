@@ -1,6 +1,5 @@
-import React from 'react'
 
-function CheckoutPage() {
+const CheckoutPage = () => {
   return (
     <div>CheckoutPage</div>
   )

@@ -1,8 +1,8 @@
-import React from 'react'
 
-function PageNotFound() {
+
+const PageNotFound = () => {
   return (
-    <div>PageNotFound</div>
+    <div>404 </div>
   )
 }
 
