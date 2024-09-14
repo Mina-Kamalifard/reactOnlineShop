@@ -4,12 +4,14 @@ import { useState } from "react";
 import styles from "./ProductsPage.module.css";
 import Loader from "../components/Loader";
 import { ImSearch } from "react-icons/im";
-import { useState } from "react";
+
 const ProductsPage = () => {
   const products = useProducts();
   console.log(products);
   const [search, setSearch] = useState([]);
-  const searchHandler = () => {console.log("SEARCH")};
+  const searchHandler = () => {
+    console.log("SEARCH");
+  };
   return (
     <>
       <div>
