@@ -9,7 +9,7 @@ const ProductsPage = () => {
   const products = useProducts();
   console.log(products);
   const [search, setSearch] = useState([]);
-  const searchHandler = () => {};
+  const searchHandler = () => {console.log("SEARCH")};
   return (
     <>
       <div>
