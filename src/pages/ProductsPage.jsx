@@ -5,33 +5,50 @@ import styles from "./ProductsPage.module.css";
 import Loader from "../components/Loader";
 import { ImSearch } from "react-icons/im";
 import { FaListUl } from "react-icons/fa";
+import {
+  filterProducts,
+  searchProducts,
+  createQueryObject,
+  getInitialQuery,
+} from "../helpers/helper";
+import { useSearchParams } from "react-router-dom";
 
 const ProductsPage = () => {
   const products = useProducts();
   console.log(products);
 
   const [displayed, setDisplayed] = useState([]);
-  const [search, setSearch] = useState([]);
+  const [search, setSearch] = useState("");
   const [query, setQuery] = useState({});
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     setDisplayed(products);
+
+    setQuery(getInitialQuery(searchParams));
   }, [products]);
 
   useEffect(() => {
-    console.log(query);
+    setSearchParams(query);
+    setSearch(query.search || "");
+    let finalProducts = searchProducts(products, query.search);
+    finalProducts = filterProducts(finalProducts, query.category); // capture the return value
+    setDisplayed(finalProducts);
   }, [query]);
 
   const searchHandler = () => {
-    setQuery((query) => ({ ...query, search }));
+    setQuery((query) => createQueryObject(query, { search }));
   };
   const categoryHandler = (event) => {
     const { tagName } = event.target;
-    const category = event.target.innerText.toLocaleLowerCase();
+    const category = event.target.innerText.toLowerCase();
 
     if (tagName !== "LI") return;
-    setQuery((query) => ({ ...query, category }));
+
+    setQuery((query) => createQueryObject(query, { category }));
+    console.log(query);
   };
+
   return (
     <>
       <div>
@@ -56,14 +73,14 @@ const ProductsPage = () => {
           <div>
             <FaListUl />
             <p>Categories</p>
-            <ul onClick={categoryHandler}>
-              <li>All</li>
-              <li>Electronics</li>
-              <li>Jewelery</li>
-              <li>Men's Clothing</li>
-              <li>Women's Clothing</li>
-            </ul>
           </div>
+          <ul onClick={categoryHandler}>
+            <li>All</li>
+            <li>Electronics</li>
+            <li>Jewelery</li>
+            <li>Men's Clothing</li>
+            <li>Women's Clothing</li>
+          </ul>
         </div>
       </div>
     </>
