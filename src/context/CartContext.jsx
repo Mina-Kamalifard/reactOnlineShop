@@ -1,5 +1,6 @@
 import { createContext, useReducer, useContext } from "react";
 import { sumProducts } from "../helpers/helper";
+import { useEffect } from "react";
 const initialState = {
   selectedItems: [],
   itemsCounter: 0,
@@ -54,7 +55,10 @@ const reducer = (state, action) => {
         total: 0,
         checkout: true,
       };
-
+    case "LOAD_SAVED_CART":
+      return {
+        ...action.payload,
+      };
     default:
       throw new Error("Invalid Action!");
   }
@@ -62,7 +66,16 @@ const reducer = (state, action) => {
 
 const CartContext = createContext();
 const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const getInitialState = () => {
+    const stored = localStorage.getItem("shopCartState");
+    return stored ? JSON.parse(stored) : initialState;
+  };
+  const [state, dispatch] = useReducer(reducer, initialState, getInitialState);
+
+  useEffect(() => {
+    localStorage.setItem("shopCartState", JSON.stringify(state));
+  }, [state]);
+
   return (
     <CartContext.Provider value={{ state, dispatch }}>
       {children}
